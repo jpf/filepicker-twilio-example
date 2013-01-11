@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SMS an image</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/css/bootstrap.css" rel="stylesheet">
+    <link href="static/css/bootstrap-responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="static/ico/favicon.ico">
+    <script src="http://api.filepicker.io/v1/filepicker.js"></script>
+    <script type="text/javascript">
+      filepicker.setKey('{{ filepicker_api_key }}');
+    </script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span8">
+          <h1>SMS an image</h1>
+          <form action="/" method="POST" class="form-horizontal">
+            <div class="control-group">
+            <label for="phone_number" class="control-label">Cell phone number:</label>
+              <div class="controls">
+                <input name="phone_number" type="text">
+	      </div>
+            </div>
+            <div class="control-group">
+              <label for="file" class="control-label">Image to send via SMS:</label>
+              <div class="controls">
+                <input class="btn" name="file" type="filepicker" />
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <button type="submit" class="btn btn-primary">Send File</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% if sms_sent is sameas False %}
+      <div class="row-fluid">
+        <div class="span4">
+          <h3 class="text-error">Error sending SMS. Try again?</h3>
+        </div>
+      </div>
+      {% endif %} 
+      {% if sms_sent is sameas True %}
+      <div class="row-fluid">
+        <div class="span4">
+	  <h2>Sent to {{ phone_number }}:</h2>
+	  <img src="{{ file }}"/>
+        </div>
+      </div>
+      {% endif %} 
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="static/js/bootstrap.js"></script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><title>SMS an image</title></head>
+  <body>
+    <form action="/" method="POST">
+      Cell phone number: <input name="phone_number" type="text" />
+      Image to send via SMS: <input name="file" type="filepicker" />
+      <button type="submit">Send File</button>
+    </form>
+    <script src="http://api.filepicker.io/v1/filepicker.js"></script>
+    <script type="text/javascript">
+    filepicker.setKey('{{ filepicker_api_key }}');
+    </script>
+  </body>
+</html>
