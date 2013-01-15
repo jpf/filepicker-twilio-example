@@ -1,10 +1,14 @@
-import os
+import os, re
 from twilio.rest import TwilioRestClient
+import sendgrid
 from flask import Flask, request, render_template
 app = Flask(__name__)
+
 # TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN environment variables must be set
 client = TwilioRestClient()
 
+# SENDGRID_USER and SENDGRID_PASS enviornment variables must be set
+sg = sendgrid.Sendgrid(os.environ.get('SENDGRID_USER'), os.environ.get('SENDGRID_PASS'), secure=True)
 
 @app.route("/", methods=['POST', 'GET'])
 def index():
@@ -14,14 +18,25 @@ def index():
         option['file'] = request.form['file']
         option['phone_number'] = request.form['phone_number']
         try:
+          body = "Check out this picture: %s?dl=false" % option['file']
+
+          if not re.match(r"[^@]+@[^@]+\.[^@]+", option['phone_number']):
+            # Phone
             from_ = os.environ.get('TWILIO_FROM_NUMBER')
-            body = "Check out this picture: %s?dl=false" % option['file']
             client.sms.messages.create(to=option['phone_number'],
                                        from_=from_,
                                        body=body)
-            option['sms_sent'] = True
+          else:
+            # Email
+            from_ = os.environ.get('SENDGRID_FROM_EMAIL')
+            message = sendgrid.Message(from_, "Check out this picture", body, body)
+            message.add_to(option['phone_number'])
+
+            sg.web.send(message)
+
+          option['message_sent'] = True
         except:
-            option['sms_sent'] = False
+            option['message_sent'] = False
     return render_template('index.html', **option)
 
 
