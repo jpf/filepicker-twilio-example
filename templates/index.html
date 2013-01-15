@@ -22,7 +22,7 @@
           <h1>SMS an image</h1>
           <form action="/" method="POST" class="form-horizontal">
             <div class="control-group">
-            <label for="phone_number" class="control-label">Cell phone number:</label>
+              <label for="phone_number" class="control-label">Cell phone number<br /> (or email address):</label>
               <div class="controls">
                 <input name="phone_number" type="text">
 	      </div>
@@ -41,14 +41,14 @@
           </form>
         </div>
       </div>
-      {% if sms_sent is sameas False %}
+      {% if message_sent is sameas False %}
       <div class="row-fluid">
         <div class="span4">
           <h3 class="text-error">Error sending SMS. Try again?</h3>
         </div>
       </div>
       {% endif %} 
-      {% if sms_sent is sameas True %}
+      {% if message_sent is sameas True %}
       <div class="row-fluid">
         <div class="span4">
 	  <h2>Sent to {{ phone_number }}:</h2>
